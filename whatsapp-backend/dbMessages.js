@@ -8,4 +8,4 @@ import mongoose from "mongoose";
  })
 
  //collection
- export default mongoose.model('messagecontents' , whatsappSchema)
+ export default mongoose.model('messagecontents' , whatsappSchema);

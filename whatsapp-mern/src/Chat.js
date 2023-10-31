@@ -54,28 +54,19 @@ const [input,setInput]=useState("");
           </span>
         </p>
         ))}
-        
-
-        {/* <p className='chat__message chat__reciever'>
-          <span className='chat__name'>Shubham</span>
-          This is a message
-          <span className='chat__timestamp'>
-            {new Date().toUTCString()}
-          </span>
-        </p> */}
-
       </div>
+
       <div className='chat__footer'>
       <InsertEmoticonIcon/>
       <form>
-        <input value={input} onChange={(e)=>setInput(e.target.value)} placeholder='Type a message' type='text' />
+        <input value={input} onChange={e=>setInput(e.target.value)} placeholder='Type a message' type='text' />
         <button onClick={sendMessage} type="submit">Send a message</button>
       </form>
       <MicIcon/>
       </div>
     </div>
-  )
+  );
 }
 
 
-export default Chat
+export default Chat;

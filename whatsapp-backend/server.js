@@ -3,11 +3,11 @@ import  express  from "express";
 import mongoose from "mongoose";
 import Messages from "./dbMessages.js";
 import Pusher from "pusher";
-import cors from "cors";
+// import cors from "cors";
 
 //app config
 const app=express();
-const port=process.env.PORT || 3000
+const port=process.env.PORT || 3000;
 
 const pusher = new Pusher({
     appId: "1611703",
@@ -18,16 +18,15 @@ const pusher = new Pusher({
   });
 
 //middleware
+app.use(express.urlencoded({extended:true}));
 app.use(express.json());
-// app.use(express.urlencoded({extended:true}));
-app.use(cors());
+// app.use(cors());
 
-
-// app.use((req,res,next)=>{
-//     res.setHeader("Acess-Control-Allow-Origin","*");
-//     res.setHeader("Acess-Control-Allow-Headers","*");
-//     next();
-// });
+app.use((req,res,next)=>{
+    res.setHeader("Acess-Control-Allow-Origin","*");
+    res.setHeader("Acess-Control-Allow-Headers","*");
+    next();
+});
 
 //DB config
 const connection_url="mongodb+srv://admin:rgBbv954uHGWtQJ1@cluster0.dzny8ep.mongodb.net/whatsappdb?retryWrites=true&w=majority";
@@ -46,9 +45,9 @@ db.once('open',()=>{
     const changeStream=msgCollection.watch();
 
     changeStream.on('change',(change)=>{
-        console.log(change) 
+        console.log("a change occured",change);
 
-        if(change.operationType === "insert"){
+        if(change.operationType === 'insert'){
             const messageDetails = change.fullDocument;
             pusher.trigger("messages","inserted",{
                 name:messageDetails.name,
@@ -69,9 +68,9 @@ app.get('/',(req,res)=>res.status(200).send("hello world"));
 app.get('/messages/sync',(req,res)=>{
     Messages.find((err,data)=>{
         if(err){
-            res.status(500).send(err)
+            res.status(500).send(err);
         }else{
-            res.status(200).send(data)
+            res.status(200).send(data);
         }
     })
 })
@@ -81,9 +80,9 @@ app.post('/messages/new',(req,res)=>{
 
     Messages.create(dbMessage,(err,data)=>{
         if(err){
-            res.status(500).send(err)
+            res.status(500).send(err);
         }else{
-            res.status(201).send(data)
+            res.status(201).send(data);
         }
     })
 })
@@ -91,4 +90,4 @@ app.post('/messages/new',(req,res)=>{
 
 
 //listen
-app.listen(port,()=>console.log(`litening on local host:${port}`))
+app.listen(port,()=>console.log(`listening on localhost:${port}`))

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect,useState} from 'react';
 import "./App.css";
 import Chat from "./Chat"
 import Sidebar from "./Sidebar";
@@ -10,10 +10,11 @@ function App() {
 const [messages,setMessages]=useState([]);
 
   useEffect(()=>{
-    axios.get("/messages/sync")
-    .then((response)=>{
+    axios.get("/messages/sync").then((response)=>{
       setMessages(response.data);
-    });
+    }).catch(function (err) {
+        console.log('ERROR: ', err)
+      })
   }, []);
 
 
@@ -24,6 +25,8 @@ useEffect(()=>{
 
   const channel = pusher.subscribe("messages");
   channel.bind("inserted", (newMessage)=> {
+    // console.log('inserted');
+    // alert(JSON.stringify(newMessage));
     setMessages([...messages,newMessage])
   });
 
